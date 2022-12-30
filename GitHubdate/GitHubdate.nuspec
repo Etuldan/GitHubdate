@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package >
+    <metadata>
+        <id>GitHubdate</id>
+        <version>1.0.13</version>
+        <title>GitHubdate</title>
+        <authors>Etuldan</authors>
+        <owners>Etuldan</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Automatic updates from GitHub releases</description>
+        <releaseNotes>First release</releaseNotes>
+        <copyright>Copyright 2022 (c) Contoso Corporation. All rights reserved.</copyright>
+        <tags>github update release version</tags>
+        <dependencies>
+            <group targetFramework="net472">
+                <dependency id="Newtonsoft.Json" version="13.0.2" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+    <file src="bin\Release\GitHubdate.dll" target="lib\net46\GitHubdate.dll" />
+</files>
+</package>
