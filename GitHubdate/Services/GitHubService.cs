@@ -47,6 +47,10 @@ namespace GitHubdate.Services
 
                     if (release.Prerelease == false && release.Draft == false)
                     {
+                        if(release.TagName.StartsWith("v") || release.TagName.StartsWith("V"))
+                        {
+                            release.TagName = release.TagName.Substring(1);
+                        }
                         try
                         {
                             return new InformationsModel()
@@ -59,7 +63,7 @@ namespace GitHubdate.Services
                                 WebUrl = release.HtmlUrl
                             };
                         }
-                        catch (FormatException e)
+                        catch (FormatException)
                         {
                             continue;
                         }
