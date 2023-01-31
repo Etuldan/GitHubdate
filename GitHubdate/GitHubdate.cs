@@ -24,7 +24,7 @@ namespace GitHubdate
             _serviceGitHubInfo = new GitHubService(Username, Project);
         }
 
-        private async Task DownloadAndInstall()
+        public async Task DownloadAndInstall()
         {
             var fullPath = Path.Combine(Path.GetTempPath(), _gitHubInformations.FileName);
 
@@ -45,7 +45,8 @@ namespace GitHubdate
                     UseShellExecute = false,
                     FileName = fullPath,
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = _installArguments
+                    Arguments = _installArguments,
+                    Verb = "runas"
                 };
                 try
                 {
@@ -60,21 +61,19 @@ namespace GitHubdate
             }
         }
 
-        public async Task Check()
+        public async Task<bool> Check()
         {
             _gitHubInformations = await _serviceGitHubInfo.FetchInfo();
             if( _gitHubInformations == null || _gitHubInformations.DownloadUrl == null || _gitHubInformations.FileName == null || _gitHubInformations.Version == null)
             {
-                return;
+                return false;
             }
             if (_gitHubInformations.Version.CompareTo(_serviceLocalInfo.Version) > 0)
             {
                 if (!_automaticUpdate)
                 {
-                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                    DialogResult result;
-
-                    result = MessageBox.Show(
+                    var buttons = MessageBoxButtons.YesNo;
+                    var result = MessageBox.Show(
                         $"Current version: {_serviceLocalInfo.Version}\n" +
                         $"Available version: {_gitHubInformations.Version}\n\n" +
                         _gitHubInformations.Description, 
@@ -82,14 +81,15 @@ namespace GitHubdate
                         buttons);
                     if (result == DialogResult.Yes)
                     {
-                        await DownloadAndInstall();
+                        return true;
                     }
                 }
                 else
                 {
-                    await DownloadAndInstall();
+                    return true;
                 }
             }
+            return false;
         }
     }
 }
